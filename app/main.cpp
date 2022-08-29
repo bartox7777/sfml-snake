@@ -2,15 +2,16 @@
 
 #include <SFML/Window.hpp>
 
-#include "Block.h"
+// #include "../include/Block.h"
+#include "../include/Snake.h"
 
 using namespace std;
 
 int main(){
     sf::RenderWindow window(sf::VideoMode(800, 600), "Snake");
-    Block block(sf::Vector2f(0, 0), sf::Vector2f(10, 10));
+    Snake snake(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Vector2f(10, 10), sf::Color::Red);
     sf::Event event;
-
+    snake.addBlock();
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
@@ -20,7 +21,7 @@ int main(){
         }
 
         window.clear();
-        block.draw(window);
+        snake.draw(window);
         window.display();
     }
 }
