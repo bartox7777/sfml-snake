@@ -13,6 +13,14 @@ sf::Vector2f Block::getPosition() const{
     return shape.getPosition();
 }
 
+void Block::setPosition(sf::Vector2f position){
+    shape.setPosition(position);
+}
+
 Block::direction Block::getDirection() const{
     return blockDirection;
+}
+
+void Block::setDirection(direction direction){
+    blockDirection = direction;
 }
