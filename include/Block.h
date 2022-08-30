@@ -1,15 +1,17 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 
 class Block{
     public:
         enum direction{
+            NONE,
             UP,
             DOWN,
             LEFT,
             RIGHT
         };
 
-        Block(sf::Vector2f position, sf::Vector2f size, sf::Color color = sf::Color::White, direction blockDirection = direction::UP);
+        Block(sf::Vector2f position, sf::Vector2f size, sf::Color color = sf::Color::Red, direction blockDirection = direction::NONE);
 
         void draw(sf::RenderTarget& target) const;
 
@@ -19,7 +21,9 @@ class Block{
         direction getDirection() const;
         void setDirection(direction direction);
 
-    private:
+    protected:
         sf::RectangleShape shape;
+
+    private:
         direction blockDirection;
 };

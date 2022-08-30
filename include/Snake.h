@@ -6,7 +6,7 @@
 
 class Snake{
     public:
-        Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color = sf::Color::White);
+        Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color = sf::Color::White, Block::direction headDirection = Block::direction::RIGHT);
 
         void draw(sf::RenderTarget& target) const;
         void move();
@@ -21,7 +21,8 @@ class Snake{
         sf::Vector2f getHeadPosition() const;
 
         bool isCollidingWithItself() const;
-        bool isCollidingWithWall(sf::Vector2f sizeOfWindow) const;
+        bool isCollidingWithWall(sf::Vector2u sizeOfWindow) const;
+        bool isCollidingWithBlock(Block* blockPoint) const;
     private:
         std::vector<Block*> blocks;
         sf::Vector2f sizeOfBlock;

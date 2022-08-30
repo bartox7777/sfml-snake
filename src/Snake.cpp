@@ -1,7 +1,7 @@
 #include "../include/Snake.h"
 
-Snake::Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color) : sizeOfBlock(sizeOfBlock), color(color){
-    blocks.push_back(new Block(position, sizeOfBlock, color));
+Snake::Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color, Block::direction headDirection) : sizeOfBlock(sizeOfBlock), color(color){
+    blocks.push_back(new Block(position, sizeOfBlock, color, headDirection));
 }
 
 void Snake::draw(sf::RenderTarget& target) const{
@@ -82,11 +82,18 @@ bool Snake::isCollidingWithItself() const{
     return false;
 }
 
-bool Snake::isCollidingWithWall(sf::Vector2f sizeOfWindow) const{
+bool Snake::isCollidingWithWall(sf::Vector2u sizeOfWindow) const{
     if (getHeadPosition().x < 0 || getHeadPosition().x > sizeOfWindow.x){
         return true;
     }
     if (getHeadPosition().y < 0 || getHeadPosition().y > sizeOfWindow.y){
+        return true;
+    }
+    return false;
+}
+
+bool Snake::isCollidingWithBlock(Block* block) const{
+    if (getHeadPosition() == block->getPosition()){
         return true;
     }
     return false;

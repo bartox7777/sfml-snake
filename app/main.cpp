@@ -2,7 +2,7 @@
 
 #include <SFML/Window.hpp>
 
-// #include "../include/Block.h"
+#include "../include/BlockPoint.h"
 #include "../include/Snake.h"
 
 using namespace std;
@@ -12,23 +12,10 @@ int main(){
     Snake snake(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Vector2f(10, 10), sf::Color::Red);
     sf::Event event;
     sf::Clock clock;
-    sf::Time elapsed;
+    sf::Time elapsed, threshold = sf::seconds(0.1);
+    BlockPoint bp(window.getSize(), sf::Vector2f(10, 10), sf::Color::Green);
 
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
-    snake.addBlock();
+    srand(time(NULL));
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
@@ -64,14 +51,20 @@ int main(){
 
         window.clear();
         snake.draw(window);
-        if (clock.getElapsedTime().asSeconds() > 0.1){
+        bp.draw(window);
+        if (clock.getElapsedTime().asSeconds() > threshold.asSeconds()){
             snake.move();
             clock.restart();
         }
         window.display();
-         if (snake.isCollidingWithItself() || snake.isCollidingWithWall(sf::Vector2f(window.getSize().x, window.getSize().y))){
+        if (snake.isCollidingWithItself() || snake.isCollidingWithWall(window.getSize())){
                 cout << "You lose!" << endl;
                 return 0;
+        }
+        if (snake.isCollidingWithBlock(&bp)){
+            snake.addBlock();
+            threshold = sf::seconds(threshold.asSeconds() * 0.99);
+            bp.setRandomPosition(window.getSize());
         }
     }
 }
