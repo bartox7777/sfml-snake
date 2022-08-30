@@ -13,10 +13,15 @@ class Snake{
 
         // method which adds a new block at the end of the snake
         void addBlock();
+        bool isThereBlock(sf::Vector2f position) const;
 
         Block::direction getDirection() const;
         void setDirection(Block::direction direction);
 
+        sf::Vector2f getHeadPosition() const;
+
+        bool isCollidingWithItself() const;
+        bool isCollidingWithWall(sf::Vector2f sizeOfWindow) const;
     private:
         std::vector<Block*> blocks;
         sf::Vector2f sizeOfBlock;

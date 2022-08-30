@@ -14,6 +14,22 @@ int main(){
     sf::Clock clock;
     sf::Time elapsed;
 
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+    snake.addBlock();
+
     while (window.isOpen()){
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed){
@@ -23,16 +39,24 @@ int main(){
             if (event.type == sf::Event::KeyPressed){
                 switch (event.key.code){
                     case sf::Keyboard::Up:
-                        snake.setDirection(Block::direction::UP);
+                        if (!(snake.getDirection() == Block::direction::DOWN && snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(0, -10)))){
+                            snake.setDirection(Block::direction::UP);
+                        }
                         break;
                     case sf::Keyboard::Down:
-                        snake.setDirection(Block::direction::DOWN);
+                        if (!(snake.getDirection() == Block::direction::UP && snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(0, 10)))){
+                            snake.setDirection(Block::direction::DOWN);
+                        }
                         break;
                     case sf::Keyboard::Left:
-                        snake.setDirection(Block::direction::LEFT);
+                        if (!(snake.getDirection() == Block::direction::RIGHT && snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(-10, 0)))){
+                            snake.setDirection(Block::direction::LEFT);
+                        }
                         break;
                     case sf::Keyboard::Right:
-                        snake.setDirection(Block::direction::RIGHT);
+                        if (!(snake.getDirection() == Block::direction::LEFT && snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(10, 0)))){
+                            snake.setDirection(Block::direction::RIGHT);
+                        }
                         break;
                 }
             }
@@ -45,5 +69,9 @@ int main(){
             clock.restart();
         }
         window.display();
+         if (snake.isCollidingWithItself() || snake.isCollidingWithWall(sf::Vector2f(window.getSize().x, window.getSize().y))){
+                cout << "You lose!" << endl;
+                return 0;
+        }
     }
 }
