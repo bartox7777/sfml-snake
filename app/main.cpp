@@ -65,6 +65,7 @@ int main(){
             snake.addBlock();
             threshold = sf::seconds(threshold.asSeconds() * 0.99);
             bp.setRandomPosition(window.getSize());
+            snake.points++;
         }
     }
 }

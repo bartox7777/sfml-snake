@@ -1,6 +1,6 @@
 #include "../include/Snake.h"
 
-Snake::Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color, Block::direction headDirection) : sizeOfBlock(sizeOfBlock), color(color){
+Snake::Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color, Block::direction headDirection) : sizeOfBlock(sizeOfBlock), color(color), points(0){
     blocks.push_back(new Block(position, sizeOfBlock, color, headDirection));
 }
 

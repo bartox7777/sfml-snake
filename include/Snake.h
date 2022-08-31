@@ -8,6 +8,8 @@ class Snake{
     public:
         Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color = sf::Color::White, Block::direction headDirection = Block::direction::RIGHT);
 
+        unsigned int points;
+
         void draw(sf::RenderTarget& target) const;
         void move();
 
