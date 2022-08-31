@@ -9,13 +9,21 @@ using namespace std;
 
 int main(){
     sf::RenderWindow window(sf::VideoMode(800, 600), "Snake");
-    Snake snake(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Vector2f(10, 10), sf::Color::Red);
     sf::Event event;
     sf::Clock clock;
+    sf::Font font;
+    sf::Text text;
     sf::Time elapsed, threshold = sf::seconds(0.1);
+
+    Snake snake(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Vector2f(10, 10), sf::Color::Red);
     BlockPoint bp(window.getSize(), sf::Vector2f(10, 10), sf::Color::Green);
 
-    srand(time(NULL));
+    snake.addBlock();
+
+    font.loadFromFile("fonts/Pointless.ttf");
+    text.setFont(font);
+    text.setString("Points: " + to_string(snake.points));
+    text.setPosition(10, 10);
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
@@ -26,30 +34,35 @@ int main(){
             if (event.type == sf::Event::KeyPressed){
                 switch (event.key.code){
                     case sf::Keyboard::Up:
-                        if (!(snake.getDirection() == Block::direction::DOWN && snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(0, -10)))){
-                            snake.setDirection(Block::direction::UP);
+                        if (snake.getDirection() == Block::direction::DOWN || snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(0, -10))){
+                            break;
                         }
+                        snake.setDirection(Block::direction::UP);
                         break;
                     case sf::Keyboard::Down:
-                        if (!(snake.getDirection() == Block::direction::UP && snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(0, 10)))){
-                            snake.setDirection(Block::direction::DOWN);
+                        if (snake.getDirection() == Block::direction::UP || snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(0, 10))){
+                            break;
                         }
+                        snake.setDirection(Block::direction::DOWN);
                         break;
                     case sf::Keyboard::Left:
-                        if (!(snake.getDirection() == Block::direction::RIGHT && snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(-10, 0)))){
-                            snake.setDirection(Block::direction::LEFT);
+                        if (snake.getDirection() == Block::direction::RIGHT || snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(-10, 0))){
+                            break;
                         }
+                        snake.setDirection(Block::direction::LEFT);
                         break;
                     case sf::Keyboard::Right:
-                        if (!(snake.getDirection() == Block::direction::LEFT && snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(10, 0)))){
-                            snake.setDirection(Block::direction::RIGHT);
+                        if (snake.getDirection() == Block::direction::LEFT || snake.isThereBlock(snake.getHeadPosition() + sf::Vector2f(10, 0))){
+                            break;
                         }
+                        snake.setDirection(Block::direction::RIGHT);
                         break;
                 }
             }
         }
 
         window.clear();
+        window.draw(text);
         snake.draw(window);
         bp.draw(window);
         if (clock.getElapsedTime().asSeconds() > threshold.asSeconds()){
@@ -66,6 +79,7 @@ int main(){
             threshold = sf::seconds(threshold.asSeconds() * 0.99);
             bp.setRandomPosition(window.getSize());
             snake.points++;
+            text.setString("Points: " + to_string(snake.points));
         }
     }
 }
