@@ -21,7 +21,7 @@ int main(){
     sf::SoundBuffer pointSoundBuffer;
 
     Snake snake(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Vector2f(10, 10), sf::Color::Red);
-    BlockPoint bp(window.getSize(), sf::Vector2f(10, 10), sf::Color::Green);
+    BlockPoint blockPoint(window.getSize(), sf::Vector2f(10, 10), sf::Color::Green);
 
     snake.addBlock();
 
@@ -89,7 +89,7 @@ int main(){
         window.clear();
         window.draw(text);
         snake.draw(window);
-        bp.draw(window);
+        blockPoint.draw(window);
         if (clock.getElapsedTime().asSeconds() > threshold.asSeconds()){
             snake.move();
             clock.restart();
@@ -97,14 +97,15 @@ int main(){
         window.display();
         if (snake.isCollidingWithItself() || snake.isCollidingWithWall(window.getSize())){
                 cout << "You lose!" << endl;
+                cout << "Points: " << snake.points << endl;
                 return 0;
         }
-        if (snake.isCollidingWithBlock(&bp)){
+        if (snake.isCollidingWithBlock(&blockPoint)){
             pointSound.play();
             snake.addBlock();
             threshold = sf::seconds(threshold.asSeconds() * 0.98);
             sound.setPitch(sound.getPitch() + 0.03);
-            bp.setRandomPosition(window.getSize());
+            blockPoint.setRandomPosition(window.getSize());
             snake.points++;
             text.setString("Points: " + to_string(snake.points));
         }
