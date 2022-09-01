@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 
 #include "../include/BlockPoint.h"
 #include "../include/Snake.h"
@@ -14,16 +15,29 @@ int main(){
     sf::Font font;
     sf::Text text;
     sf::Time elapsed, threshold = sf::seconds(0.1);
+    sf::Sound sound;
+    sf::SoundBuffer soundBuffer;
 
     Snake snake(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Vector2f(10, 10), sf::Color::Red);
     BlockPoint bp(window.getSize(), sf::Vector2f(10, 10), sf::Color::Green);
 
     snake.addBlock();
 
-    font.loadFromFile("fonts/Pointless.ttf");
+    if(!font.loadFromFile("fonts/Pointless.ttf")){
+        cout << "Error loading font" << endl;
+        return -1;
+    }
     text.setFont(font);
     text.setString("Points: " + to_string(snake.points));
     text.setPosition(10, 10);
+
+    if(!soundBuffer.loadFromFile("sounds/mainsong.wav")){
+        cout << "Error loading sound" << endl;
+        return -1;
+    }
+    sound.setBuffer(soundBuffer);
+
+    sound.play();
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
