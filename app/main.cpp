@@ -36,7 +36,9 @@ int main(){
         return -1;
     }
     sound.setBuffer(soundBuffer);
-
+    sound.setLoop(true);
+    sound.setVolume(10);
+    sound.setPitch(0.8);
     sound.play();
 
     while (window.isOpen()){
@@ -90,7 +92,8 @@ int main(){
         }
         if (snake.isCollidingWithBlock(&bp)){
             snake.addBlock();
-            threshold = sf::seconds(threshold.asSeconds() * 0.99);
+            threshold = sf::seconds(threshold.asSeconds() * 0.98);
+            sound.setPitch(sound.getPitch() + 0.03);
             bp.setRandomPosition(window.getSize());
             snake.points++;
             text.setString("Points: " + to_string(snake.points));
