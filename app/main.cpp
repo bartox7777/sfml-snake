@@ -16,7 +16,9 @@ int main(){
     sf::Text text;
     sf::Time elapsed, threshold = sf::seconds(0.1);
     sf::Sound sound;
+    sf::Sound pointSound;
     sf::SoundBuffer soundBuffer;
+    sf::SoundBuffer pointSoundBuffer;
 
     Snake snake(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Vector2f(10, 10), sf::Color::Red);
     BlockPoint bp(window.getSize(), sf::Vector2f(10, 10), sf::Color::Green);
@@ -40,6 +42,13 @@ int main(){
     sound.setVolume(10);
     sound.setPitch(0.8);
     sound.play();
+
+    if(!pointSoundBuffer.loadFromFile("sounds/getPointSound.wav")){
+        cout << "Error loading sound" << endl;
+        return -1;
+    }
+    pointSound.setBuffer(pointSoundBuffer);
+    pointSound.setVolume(50);
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
@@ -91,6 +100,7 @@ int main(){
                 return 0;
         }
         if (snake.isCollidingWithBlock(&bp)){
+            pointSound.play();
             snake.addBlock();
             threshold = sf::seconds(threshold.asSeconds() * 0.98);
             sound.setPitch(sound.getPitch() + 0.03);
