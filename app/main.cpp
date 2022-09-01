@@ -48,7 +48,7 @@ int main(){
         return -1;
     }
     pointSound.setBuffer(pointSoundBuffer);
-    pointSound.setVolume(50);
+    pointSound.setVolume(10);
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
