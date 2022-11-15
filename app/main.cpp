@@ -20,8 +20,10 @@ int main(){
     sf::SoundBuffer soundBuffer;
     sf::SoundBuffer pointSoundBuffer;
 
+    auto surfaceToDrawPointPosition = window.getSize() - sf::Vector2u(50, 50);
+
     Snake snake(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Vector2f(10, 10), sf::Color::Red);
-    BlockPoint blockPoint(window.getSize(), sf::Vector2f(10, 10), sf::Color::Green);
+    BlockPoint blockPoint(surfaceToDrawPointPosition, sf::Vector2f(10, 10), sf::Color::Green);
 
     snake.addBlock();
 
@@ -105,7 +107,7 @@ int main(){
             snake.addBlock();
             threshold = sf::seconds(threshold.asSeconds() * 0.98);
             sound.setPitch(sound.getPitch() + 0.03);
-            blockPoint.setRandomPosition(window.getSize());
+            blockPoint.setRandomPosition(surfaceToDrawPointPosition);
             snake.points++;
             text.setString("Points: " + to_string(snake.points));
         }
