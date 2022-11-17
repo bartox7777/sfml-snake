@@ -30,6 +30,7 @@ class Game{
         float startSpeed;
 
         void presetGame();
+        void gameLost();
 
         Snake* snake;
         BlockPoint* blockPoint;
@@ -37,6 +38,7 @@ class Game{
         std::string fontPath;
         std::string soundPath;
         std::string pointSoundPath;
+        std::string window_title;
 
         bool loadFont(std::string);
         void setPointsText();

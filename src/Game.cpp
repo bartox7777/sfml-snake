@@ -10,6 +10,8 @@ Game::Game(int width, int height, string window_title, int pointPadding, int poi
     pointSize = ((int)pointSize/10)*10;
     window.create(sf::VideoMode(width, height), window_title);
 
+    this->window_title = window_title;
+
     this->startSpeed = startSpeed;
 
     this->pointPadding = pointPadding;
@@ -44,6 +46,8 @@ bool Game::run(){
             }
 
             if (event.type == sf::Event::KeyPressed){
+                // second statment in ifs is an important protection against invalid move, but it's causing that fast moves sometimes are not registered
+                // TODO: find better solution
                 switch (event.key.code){
                     case sf::Keyboard::Up:
                         if (snake->getDirection() == Block::direction::DOWN || snake->isThereBlock(snake->getHeadPosition() + sf::Vector2f(0, -10))){
@@ -84,8 +88,7 @@ bool Game::run(){
         }
         window.display();
         if (snake->isCollidingWithItself() || snake->isCollidingWithWall(window.getSize())){
-                cout << "You lose!" << endl;
-                cout << "Points: " << snake->points << endl;
+                gameLost();
                 return true;
         }
         if (snake->isCollidingWithBlock(blockPoint) and not gavePoint){
@@ -135,4 +138,17 @@ void Game::setSounds(int volume, float pitch){
 
     pointSound.setBuffer(pointSoundBuffer);
     pointSound.setVolume(volume);
+}
+
+void Game::gameLost(){
+    sound.stop();
+    window.clear();
+    sf::Text lostText("You lost!", font, 30);
+    sf::Text lostTextPoints("Points: " + to_string(snake->points), font, 30);
+    lostText.setPosition(width/2 - lostText.getGlobalBounds().width/2, height/2 - lostText.getGlobalBounds().height/2);
+    lostTextPoints.setPosition(width/2 - lostTextPoints.getGlobalBounds().width/2, height/2 - lostTextPoints.getGlobalBounds().height/2 + 60);
+    window.draw(lostText);
+    window.draw(lostTextPoints);
+    window.display();
+    sf::sleep(sf::seconds(4));
 }
