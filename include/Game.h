@@ -6,9 +6,9 @@
 #include "../include/Snake.h"
 
 class Game{
+    friend class Menu;
     public:
-        sf::RenderWindow window;
-        Game(int width, int height, std::string window_title, int pointPadding=50, int pointSize=10, sf::Color snakeColor = sf::Color::Red, sf::Color pointColor = sf::Color::Green, std::string fontPath = "fonts/Pointless.ttf", std::string soundPath = "sounds/mainsong.wav", std::string pointSoundPath = "sounds/getPointSound.wav", int volume = 10, float pitch = 0.8);
+        Game(int width, int height, std::string window_title, int pointPadding=100, int pointSize=10, sf::Color snakeColor = sf::Color::Red, sf::Color pointColor = sf::Color::Green, std::string fontPath = "fonts/Pointless.ttf", std::string soundPath = "sounds/mainsong.wav", std::string pointSoundPath = "sounds/getPointSound.wav", int volume = 10, float pitch = 0.8);
         bool run();
     private:
         int width;
@@ -17,24 +17,24 @@ class Game{
         sf::Vector2u surfaceToDrawPointPosition;
         sf::Event event;
         sf::Clock clock;
-        sf::Font font;
         sf::Text text;
         sf::Time elapsed, threshold = sf::seconds(0.1);
         sf::Sound sound;
         sf::Sound pointSound;
         sf::SoundBuffer soundBuffer;
         sf::SoundBuffer pointSoundBuffer;
+        sf::Font font;
+        sf::RenderWindow window;
 
         Snake* snake;
         BlockPoint* blockPoint;
 
         std::string fontPath;
-
-        int volume;
-        int pitch;
+        std::string soundPath;
+        std::string pointSoundPath;
 
         bool loadFont(std::string);
         void setPointsText();
-        bool loadSound(std::string);
-        void setSounds(int, float);
+        sf::SoundBuffer loadSound(std::string);
+        void setSounds(int=10, float=0.8);
 };

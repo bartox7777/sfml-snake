@@ -7,23 +7,28 @@ using namespace std;
 Game::Game(int width, int height, string window_title, int pointPadding, int pointSize, sf::Color snakeColor, sf::Color pointColor, string fontPath, string soundPath, string pointSoundPath, int volume, float pitch){
     this->width = width;
     this->height = height;
+    pointSize = ((int)pointSize/10)*10;
     window.create(sf::VideoMode(width, height), window_title);
 
     this->pointPadding = pointPadding;
     this->surfaceToDrawPointPosition = window.getSize() - sf::Vector2u(pointPadding, pointPadding);
 
     this->snake = new Snake(sf::Vector2f(width/2, height/2), sf::Vector2f(pointSize, pointSize), snakeColor);
-    this->blockPoint = new BlockPoint(surfaceToDrawPointPosition, sf::Vector2f(pointSize, pointSize), pointColor);
+    this->blockPoint = new BlockPoint(surfaceToDrawPointPosition, sf::Vector2f(pointSize, pointSize), pointColor, pointPadding);
 
     loadFont(fontPath);
-    loadSound(soundPath);
-    loadSound(pointSoundPath);
+    // loadSound(soundPath);
+    // loadSound(pointSoundPath);
+    this->soundPath = soundPath;
+    this->pointSoundPath = pointSoundPath;
+    setSounds();
 }
 
 bool Game::run(){
-    setSounds(volume, pitch);
     setPointsText();
-    this->snake->addBlock();
+    snake->reset();
+    sound.play();
+    text.setString("Points: " + to_string(snake->points));
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
@@ -102,15 +107,18 @@ void Game::setPointsText(){
     text.setPosition(10, 10);
 }
 
-bool Game::loadSound(string soundPath){
-    if(!soundBuffer.loadFromFile(soundPath)){
+sf::SoundBuffer Game::loadSound(string soundPath){
+    sf::SoundBuffer buffer;
+    if(!buffer.loadFromFile(soundPath)){
         cout << "Error loading sound" << endl;
-        return false;
     }
-    return true;
+    return buffer;
 }
 
-void Game::setSounds(int volume=10, float pitch=0.8){
+void Game::setSounds(int volume, float pitch){
+    soundBuffer = loadSound(soundPath);
+    pointSoundBuffer = loadSound(pointSoundPath);
+
     sound.setBuffer(soundBuffer);
     sound.setLoop(true);
     sound.setVolume(volume);

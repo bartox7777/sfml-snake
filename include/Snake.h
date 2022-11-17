@@ -5,6 +5,7 @@
 #include "../include/Block.h"
 
 class Snake{
+    friend class Game;
     public:
         Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color = sf::Color::White, Block::direction headDirection = Block::direction::RIGHT);
 
@@ -25,6 +26,10 @@ class Snake{
         bool isCollidingWithItself() const;
         bool isCollidingWithWall(sf::Vector2u sizeOfWindow) const;
         bool isCollidingWithBlock(Block* blockPoint) const;
+
+        void reset();
+
+        sf::Vector2f startPosition;
     private:
         std::vector<Block*> blocks;
         sf::Vector2f sizeOfBlock;

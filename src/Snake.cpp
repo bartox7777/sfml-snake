@@ -1,13 +1,23 @@
 #include "../include/Snake.h"
 
-Snake::Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color, Block::direction headDirection) : sizeOfBlock(sizeOfBlock), color(color), points(0){
-    blocks.push_back(new Block(position, sizeOfBlock, color, headDirection));
+Snake::Snake(sf::Vector2f position, sf::Vector2f sizeOfBlock, sf::Color color, Block::direction headDirection) : sizeOfBlock(sizeOfBlock), color(color), points(0), startPosition(position){
+    blocks.push_back(new Block(startPosition, sizeOfBlock, color, headDirection));
 }
 
 void Snake::draw(sf::RenderTarget& target) const{
     for (auto block : blocks){
         block->draw(target);
     }
+}
+
+void Snake::reset(){
+    for (auto block : blocks){
+        delete block;
+    }
+    blocks.clear();
+    points = 0;
+    blocks.push_back(new Block(startPosition, sizeOfBlock, color, Block::direction::RIGHT));
+    addBlock();
 }
 
 void Snake::move(){
