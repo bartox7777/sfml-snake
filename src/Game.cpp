@@ -4,11 +4,13 @@
 
 using namespace std;
 
-Game::Game(int width, int height, string window_title, int pointPadding, int pointSize, sf::Color snakeColor, sf::Color pointColor, string fontPath, string soundPath, string pointSoundPath, int volume, float pitch){
+Game::Game(int width, int height, string window_title, int pointPadding, int pointSize, sf::Color snakeColor, sf::Color pointColor, string fontPath, string soundPath, string pointSoundPath, int volume, float pitch, float startSpeed){
     this->width = width;
     this->height = height;
     pointSize = ((int)pointSize/10)*10;
     window.create(sf::VideoMode(width, height), window_title);
+
+    this->startSpeed = startSpeed;
 
     this->pointPadding = pointPadding;
     this->surfaceToDrawPointPosition = window.getSize() - sf::Vector2u(pointPadding, pointPadding);
@@ -17,18 +19,23 @@ Game::Game(int width, int height, string window_title, int pointPadding, int poi
     this->blockPoint = new BlockPoint(surfaceToDrawPointPosition, sf::Vector2f(pointSize, pointSize), pointColor, pointPadding);
 
     loadFont(fontPath);
-    // loadSound(soundPath);
-    // loadSound(pointSoundPath);
     this->soundPath = soundPath;
     this->pointSoundPath = pointSoundPath;
+}
+
+void Game::presetGame(){
+    setPointsText();
+    snake->reset();
     setSounds();
+    sound.play();
+    text.setString("Points: " + to_string(snake->points));
+    threshold = sf::seconds(this->startSpeed);
 }
 
 bool Game::run(){
-    setPointsText();
-    snake->reset();
-    sound.play();
-    text.setString("Points: " + to_string(snake->points));
+    presetGame();
+
+    bool gavePoint = false;
 
     while (window.isOpen()){
         while (window.pollEvent(event)){
@@ -71,6 +78,7 @@ bool Game::run(){
         snake->draw(window);
         blockPoint->draw(window);
         if (clock.getElapsedTime().asSeconds() > threshold.asSeconds()){
+            gavePoint = false;
             snake->move();
             clock.restart();
         }
@@ -80,7 +88,8 @@ bool Game::run(){
                 cout << "Points: " << snake->points << endl;
                 return true;
         }
-        if (snake->isCollidingWithBlock(blockPoint)){
+        if (snake->isCollidingWithBlock(blockPoint) and not gavePoint){
+            gavePoint = true;
             pointSound.play();
             snake->addBlock();
             threshold = sf::seconds(threshold.asSeconds() * 0.98);
