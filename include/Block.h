@@ -1,8 +1,7 @@
 #pragma once
+#include "Square.h"
 
-#include <SFML/Graphics.hpp>
-
-class Block{
+class Block : public Square{
     public:
         enum direction{
             NONE,
@@ -21,9 +20,6 @@ class Block{
 
         direction getDirection() const;
         void setDirection(direction direction);
-
-    protected:
-        sf::RectangleShape shape;
 
     private:
         direction blockDirection;

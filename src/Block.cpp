@@ -1,6 +1,7 @@
 #include "../include/Block.h"
 
-Block::Block(sf::Vector2f position, sf::Vector2f size, sf::Color color, direction blockDirection) : shape(size), blockDirection(blockDirection){
+Block::Block(sf::Vector2f position, sf::Vector2f size, sf::Color color, direction blockDirection) : blockDirection(blockDirection){
+    shape.setSize(size);
     shape.setPosition(position);
     shape.setFillColor(color);
 }
